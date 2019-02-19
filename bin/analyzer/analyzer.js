@@ -39,51 +39,56 @@ class Analyzer {
         var _this = this;
 
         return _asyncToGenerator(function* () {
+            const promiseQueues = [];
+
+            for (let i = 0; i < _this.times; i++) {
+                promiseQueues.push((yield _this.getTimings()));
+            }
+
+            console.log(promiseQueues);
+
+            yield Promise.all(promiseQueues);
+        })();
+    }
+
+    getTimings() {
+        var _this2 = this;
+
+        return _asyncToGenerator(function* () {
             const browser = yield _puppeteer2.default.launch();
             const page = yield browser.newPage();
             const client = yield page.target().createCDPSession();
 
-            yield client.send('Network.emulateNetworkConditions', _this.network);
-            yield page.goto(_this.url);
+            yield client.send('Network.emulateNetworkConditions', _this2.network);
+            yield page.setCacheEnabled(_this2.cache);
 
-            const timingObj = {};
+            yield page.goto(_this2.url, {
+                timeout: 0
+            });
 
             const performanceTiming = JSON.parse((yield page.evaluate(function () {
                 return JSON.stringify(window.performance.timing);
             })));
 
-            // timingObj['重定向时间'] = (performanceTiming.redirectEnd - performanceTiming.redirectStart) / 1000;
-            // timingObj['DNS解析时间'] = (performanceTiming.domainLookupEnd - performanceTiming.domainLookupStart) / 1000;
-            // timingObj['TCP完成握手时间'] = (performanceTiming.connectEnd - performanceTiming.connectStart) / 1000;
-
-            // timingObj['HTTP请求响应完成时间'] = (performanceTiming.responseEnd - performanceTiming.requestStart) / 1000;
-
-            // timingObj['DOM开始加载前所花费时间'] = (performanceTiming.responseEnd - performanceTiming.navigationStart) / 1000;
-
-            // timingObj['DOM加载完成时间'] = (performanceTiming.domComplete - performanceTiming.domLoading) / 1000;
-
-            // timingObj['DOM结构解析完成时间'] = (performanceTiming.domInteractive - performanceTiming.domLoading) / 1000;
-
-            // timingObj['脚本加载时间'] = (performanceTiming.domContentLoadedEventEnd - performanceTiming.domContentLoadedEventStart) / 1000;
-            // timingObj['onload事件时间'] = (performanceTiming.loadEventEnd - performanceTiming.loadEventStart) / 1000;
-            // timingObj['页面完全加载时间'] = (timingObj['重定向时间'] + timingObj['DNS解析时间'] + timingObj['TCP完成握手时间'] + timingObj['HTTP请求响应完成时间'] + timingObj['DOM结构解析完成时间'] + timingObj['DOM加载完成时间']);
-
-            console.log(performanceTiming);
-
+            _this2.logs.push(_this2.calcTimes(performanceTiming));
             yield browser.close();
         })();
     }
 
     calcTimes(timing) {
-        timing = JSON.parse(timing);
         const timingObj = {};
-        timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract((timing.domainLookupEnd, timing.domainLookupStart)), 1000);
-        timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
-        timingObj['Http request finished Time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
-        timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
-        timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete - timing.domLoading), 1000);
-        timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
-        timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
+
+        try {
+            timing = JSON.parse(timing);
+            timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract((timing.domainLookupEnd, timing.domainLookupStart)), 1000);
+            timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
+            timingObj['Http request finished Time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
+            timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
+            timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete - timing.domLoading), 1000);
+            timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
+            timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
+            timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
+        } catch (e) {}
 
         return timingObj;
     }

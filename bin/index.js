@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -28,15 +29,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * 参数处理, 调用性能分析方法
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * 参数处理, 调用性能分析方法
+ */
 
 inquirer.prompt([{
     name: 'url',
     message: 'input your test url',
     type: 'input',
-    default: 'https://www.google.com'
+    default: 'https://www.baidu.com'
 }, {
     name: 'network',
     message: 'choose your network throttler',
@@ -63,14 +66,12 @@ inquirer.prompt([{
             url,
             network: _network2.default[network],
             times: Number(times),
-            cache: cache === 'Yes',
+            cache: cache === 'No',
             log: log === 'Yes'
         });
 
         const analyzer = new _analyzer2.default(config);
         yield analyzer.analyze();
-
-        // console.log(config);
     });
 
     return function (_x) {

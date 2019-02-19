@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * 参数处理, 调用性能分析方法
  */
@@ -17,7 +19,7 @@ inquirer.prompt([
         name: 'url',
         message: 'input your test url',
         type: 'input',
-        default: 'https://www.google.com'
+        default: 'https://www.baidu.com'
     },
     {
         name: 'network',
@@ -49,13 +51,11 @@ inquirer.prompt([
         url,
         network: netWorks[network],
         times: Number(times),
-        cache: cache === 'Yes',
+        cache: cache === 'No',
         log: log === 'Yes'
     };
 
     const analyzer = new Analyzer(config);
     await analyzer.analyze();
-
-    // console.log(config);
 });
 
