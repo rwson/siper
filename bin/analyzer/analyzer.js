@@ -45,9 +45,11 @@ class Analyzer {
                 promiseQueues.push((yield _this.getTimings()));
             }
 
-            console.log(promiseQueues);
-
             yield Promise.all(promiseQueues);
+
+            // console.log(this.logs);
+
+            process.exit(1);
         })();
     }
 
@@ -70,6 +72,8 @@ class Analyzer {
                 return JSON.stringify(window.performance.timing);
             })));
 
+            console.log(performanceTiming);
+
             _this2.logs.push(_this2.calcTimes(performanceTiming));
             yield browser.close();
         })();
@@ -88,7 +92,9 @@ class Analyzer {
             timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
             timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
             timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
-        } catch (e) {}
+        } catch (e) {
+            console.log(timing);
+        }
 
         return timingObj;
     }

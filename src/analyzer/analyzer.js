@@ -25,9 +25,11 @@ export default class Analyzer {
             promiseQueues.push(await this.getTimings());
         }
 
-        console.log(promiseQueues);
-
         await Promise.all(promiseQueues);
+
+        // console.log(this.logs);
+
+        process.exit(1);
     }
 
     async getTimings() {
@@ -46,6 +48,8 @@ export default class Analyzer {
             await page.evaluate(() => JSON.stringify(window.performance.timing))
         );
 
+        console.log(performanceTiming);
+
         this.logs.push(this.calcTimes(performanceTiming));
         await browser.close();
     }
@@ -63,7 +67,9 @@ export default class Analyzer {
             timingObj['Dom parsed time'] = lodash.divide(lodash.subtract(timing.domInteractive - timing.domLoading), 1000);
             timingObj['Script Loaded time'] = lodash.divide(lodash.subtract(timing.domInteractive - timing.domLoading), 1000);
             timingObj['onLoad event time'] = lodash.divide(lodash.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
-        } catch (e) {}
+        } catch (e) {
+            console.log(timing);
+        }
 
         return timingObj;
     }

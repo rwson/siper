@@ -35,11 +35,17 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  * 参数处理, 调用性能分析方法
  */
 
+const urlPattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + '((\\d{1,3}\\.){3}\\d{1,3}))' + '(\\:\\d+)?' + // port
+'(\\/[-a-z\\d%@_.~+&:]*)*' + '(\\?[;&a-z\\d%@_.,~+&:=-]*)?' + '(\\#[-a-z\\d_]*)?$', 'i');
+
 inquirer.prompt([{
     name: 'url',
     message: 'input your test url',
     type: 'input',
-    default: 'https://www.baidu.com'
+    default: 'https://www.baidu.com',
+    validate(url) {
+        return urlPattern.test(url) ? true : 'please input a valid url';
+    }
 }, {
     name: 'network',
     message: 'choose your network throttler',
