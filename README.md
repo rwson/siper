@@ -2,6 +2,10 @@
 
 一个基于[puppeteer](https://github.com/GoogleChrome/puppeteer) 和 [PerformanceTiming API](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming)来评估网站性能的分析工具
 
+![测试中](./running.jpg)
+
+![测试完成](./finished.jpg)
+
 #### 使用方法
 
 ```bash

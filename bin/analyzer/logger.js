@@ -19,7 +19,7 @@ class Logger {
         this.logPath = options.logPath;
     }
 
-    generate() {
+    generate(logs) {
         var _this = this;
 
         return _asyncToGenerator(function* () {

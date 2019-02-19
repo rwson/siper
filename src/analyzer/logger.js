@@ -7,7 +7,7 @@ export default class Logger {
         this.logPath = options.logPath;
     }
 
-    async generate() {
+    async generate(logs) {
         if (!this.enable) {
             return;
         }

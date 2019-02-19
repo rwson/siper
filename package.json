@@ -22,13 +22,14 @@
     "create-koa-project": "bin/index.js"
   },
   "dependencies": {
+    "cli-progress": "^2.1.1",
+    "cli-table": "^0.3.1",
     "color-console": "0.0.1",
     "dayjs": "^1.8.6",
     "fs-extra-promise": "^1.0.1",
     "inquirer": "^3.3.0",
     "lodash": "^4.17.11",
-    "puppeteer": "^1.12.2",
-    "tty-table": "^2.7.0"
+    "puppeteer": "^1.12.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -12,9 +12,17 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _cliProgress = require('cli-progress');
+
+var _cliProgress2 = _interopRequireDefault(_cliProgress);
+
 var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
+
+var _table = require('./table');
+
+var _table2 = _interopRequireDefault(_table);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,28 +40,37 @@ class Analyzer {
             log: options.log,
             logPath: options.logPath
         });
+        this.tableLogger = new _table2.default();
         this.logs = [];
+        this.bar = null;
     }
 
     analyze() {
         var _this = this;
 
         return _asyncToGenerator(function* () {
+            _this.bar = new _cliProgress2.default.Bar({}, _cliProgress2.default.Presets.shades_classic);
+            _this.bar.start();
             const promiseQueues = [];
 
             for (let i = 0; i < _this.times; i++) {
-                promiseQueues.push((yield _this.getTimings()));
+                promiseQueues.push((yield _this.getTimings(i)));
             }
 
             yield Promise.all(promiseQueues);
 
-            // console.log(this.logs);
+            _this.bar.stop();
+            console.log('analyze finished, below is a table based on the number of times and statistical results.');
 
-            process.exit(1);
+            yield _this.logger.generate(_this.logs);
+
+            _this.tableLogger.printTable(_this.logs);
+
+            process.exit(0);
         })();
     }
 
-    getTimings() {
+    getTimings(index) {
         var _this2 = this;
 
         return _asyncToGenerator(function* () {
@@ -72,29 +89,23 @@ class Analyzer {
                 return JSON.stringify(window.performance.timing);
             })));
 
-            console.log(performanceTiming);
-
             _this2.logs.push(_this2.calcTimes(performanceTiming));
+
             yield browser.close();
+            _this2.bar.update(_lodash2.default.multiply(_lodash2.default.divide(_lodash2.default.add(index, 1), _this2.times), 100));
         })();
     }
 
     calcTimes(timing) {
         const timingObj = {};
-
-        try {
-            timing = JSON.parse(timing);
-            timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract((timing.domainLookupEnd, timing.domainLookupStart)), 1000);
-            timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
-            timingObj['Http request finished Time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
-            timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
-            timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete - timing.domLoading), 1000);
-            timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
-            timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
-            timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
-        } catch (e) {
-            console.log(timing);
-        }
+        timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract((timing.domainLookupEnd, timing.domainLookupStart)), 1000);
+        timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
+        timingObj['Http request finished time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
+        timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
+        timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete - timing.domLoading), 1000);
+        timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
+        timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
+        timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
 
         return timingObj;
     }
