@@ -19,7 +19,7 @@
     "node": ">=6"
   },
   "bin": {
-    "create-koa-project": "bin/index.js"
+    "siper": "bin/index.js"
   },
   "dependencies": {
     "cli-progress": "^2.1.1",
