@@ -1,0 +1,38 @@
+{
+  "name": "siper",
+  "version": "1.0.0",
+  "description": "a website performance tester",
+  "main": "index.js",
+  "keywords": [
+    "performance",
+    "analyzer",
+    "reporter",
+    "tester"
+  ],
+  "author": "rwson",
+  "license": "ISC",
+  "scripts": {
+    "watch": "babel src --watch --out-dir bin",
+    "test": "node bin/index.js"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "bin": {
+    "create-koa-project": "bin/index.js"
+  },
+  "dependencies": {
+    "color-console": "0.0.1",
+    "dayjs": "^1.8.6",
+    "fs-extra-promise": "^1.0.1",
+    "inquirer": "^3.3.0",
+    "lodash": "^4.17.11",
+    "puppeteer": "^1.12.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-node6": "^11.0.0",
+    "babel-preset-stage-3": "^6.24.1"
+  }
+}
