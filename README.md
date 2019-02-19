@@ -10,6 +10,10 @@ npm install siper -g
 siper
 ```
 
+#### 性能指标
+
+![性能指标](./performance.png)
+
 #### 各项指标对应中文介绍
 
 |显示名称|中文含义|
