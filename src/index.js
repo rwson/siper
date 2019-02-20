@@ -6,8 +6,6 @@
 
 import { reolve } from 'path';
 
-import * as fs from 'fs-extra-promise';
-
 import * as inquirer from 'inquirer';
 import lodash from 'lodash';
 
@@ -15,8 +13,6 @@ import netWorks from './config/network';
 import defaultConfig from './config/default';
 
 import Analyzer from './analyzer/analyzer';
-
-console.log(fs.writeFile('a.log', '爱上的计划把手机好多把设计好的吧'));
 
 const urlPattern = new RegExp('^((ft|htt)ps?:\\/\\/)?'+
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+
