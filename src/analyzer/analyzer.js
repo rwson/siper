@@ -67,7 +67,7 @@ export default class Analyzer {
 
     calcTimes(timing) {
         const timingObj = {};
-        timingObj['DNS lookup time'] = lodash.divide(lodash.subtract((timing.domainLookupEnd, timing.domainLookupStart)), 1000);
+        timingObj['DNS lookup time'] = lodash.divide(lodash.subtract(timing.domainLookupEnd, timing.domainLookupStart), 1000);
         timingObj['Tcp connect time'] = lodash.divide(lodash.subtract(timing.connectEnd, timing.connectStart), 1000);
         timingObj['Http request finished time'] = lodash.divide(lodash.subtract(timing.responseEnd - timing.requestStart), 1000);
         timingObj['Download time of the page'] = lodash.divide(lodash.subtract(timing.responseEnd - timing.navigationStart), 1000);

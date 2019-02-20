@@ -98,7 +98,7 @@ class Analyzer {
 
     calcTimes(timing) {
         const timingObj = {};
-        timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract((timing.domainLookupEnd, timing.domainLookupStart)), 1000);
+        timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domainLookupEnd, timing.domainLookupStart), 1000);
         timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
         timingObj['Http request finished time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
         timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
