@@ -26,7 +26,6 @@
     "cli-table": "^0.3.1",
     "color-console": "0.0.1",
     "dayjs": "^1.8.6",
-    "fs-extra-promise": "^1.0.1",
     "inquirer": "^3.3.0",
     "lodash": "^4.17.11",
     "puppeteer": "^1.12.2"

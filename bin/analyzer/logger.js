@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _fsExtraPromise = require('fs-extra-promise');
+var _fs = require('fs');
 
-var fse = _interopRequireWildcard(_fsExtraPromise);
+var fs = _interopRequireWildcard(_fs);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -26,12 +26,9 @@ class Logger {
             if (!_this.enable) {
                 return;
             }
-            console.log(JSON.stringify({
+            fs.writeFileSync(_this.logPath, JSON.stringify({
                 logs
             }, null, 2));
-            yield fse.writeJson(_this.logPath, {
-                logs
-            });
         })();
     }
 

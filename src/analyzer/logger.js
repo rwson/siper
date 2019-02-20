@@ -1,4 +1,4 @@
-import * as fse from 'fs-extra-promise';
+import * as fs from 'fs';
 
 export default class Logger {
 
@@ -11,12 +11,9 @@ export default class Logger {
         if (!this.enable) {
             return;
         }
-        console.log(JSON.stringify({
+        fs.writeFileSync(this.logPath, JSON.stringify({
             logs
         }, null, 2));
-        await fse.writeJson(this.logPath, {
-            logs
-        });
     }
 
 }

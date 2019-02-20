@@ -5,6 +5,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _path = require('path');
 
+var _fsExtraPromise = require('fs-extra-promise');
+
+var fs = _interopRequireWildcard(_fsExtraPromise);
+
 var _inquirer = require('inquirer');
 
 var inquirer = _interopRequireWildcard(_inquirer);
@@ -34,6 +38,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 /**
  * 参数处理, 调用性能分析方法
  */
+
+console.log(fs.writeFile('a.log', '爱上的计划把手机好多把设计好的吧'));
 
 const urlPattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + '((\\d{1,3}\\.){3}\\d{1,3}))' + '(\\:\\d+)?' + // port
 '(\\/[-a-z\\d%@_.~+&:]*)*' + '(\\?[;&a-z\\d%@_.,~+&:=-]*)?' + '(\\#[-a-z\\d_]*)?$', 'i');
