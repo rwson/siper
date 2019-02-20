@@ -49,7 +49,7 @@ inquirer.prompt([{
 }, {
     name: 'network',
     message: 'choose your network throttler',
-    choices: _lodash2.default.keys(_network2.default),
+    choices: _lodash2.default.keys(_network2.default).reverse(),
     type: 'list'
 }, {
     name: 'cache',

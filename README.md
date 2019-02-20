@@ -20,17 +20,16 @@ siper
 
 #### 各项指标对应中文介绍
 
-|显示名称|中文含义|
-|---|----|
-|DNS lookup time|DNS查询时间|
-|Tcp connect time|TCP完成握手时间|
-|Http request finished Time|HTTP请求响应完成时间|
-|Download time of the page|DOM开始加载前所花费时间|
-|Dom loaded time|DOM加载完成时间|
-|Dom parsed time|DOM结构解析完成时间|
-|Script Loaded time|脚本加载时间|
-|Onload event time|onload事件时间|
-|Load time|页面完全加载时间|
+|显示名称|中文含义|换算|
+|---|----|----|
+|DNS lookup time|DNS查询时间|`timing.domainLookupEnd - timing.domainLookupStart`|
+|Tcp connect time|TCP完成握手时间|`timing.connectEnd - timing.connectStart`|
+|Http request finished Time|HTTP请求响应完成时间|`timing.responseEnd - timing.requestStart`|
+|Download time of the page|DOM开始加载前所花费时间|`timing.responseEnd - timing.navigationStart`|
+|Dom loaded time|DOM加载完成时间|`timing.domComplete - timing.domLoading`|
+|Dom parsed time|DOM结构解析完成时间|`timing.domInteractive - timing.domLoading`|
+|Script Loaded time|脚本加载时间|`timing.domContentLoadedEventEnd - timing.domContentLoadedEventStart`|
+|Onload event time|onload事件时间|`timing.domInteractive - timing.domLoading`|
 
 #### 网络模式对应相关速率
 

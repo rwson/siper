@@ -26,6 +26,12 @@ class Logger {
             if (!_this.enable) {
                 return;
             }
+            console.log(JSON.stringify({
+                logs
+            }, null, 2));
+            yield fse.writeJson(_this.logPath, {
+                logs
+            });
         })();
     }
 

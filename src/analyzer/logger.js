@@ -11,6 +11,12 @@ export default class Logger {
         if (!this.enable) {
             return;
         }
+        console.log(JSON.stringify({
+            logs
+        }, null, 2));
+        await fse.writeJson(this.logPath, {
+            logs
+        });
     }
 
 }

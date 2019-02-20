@@ -102,10 +102,10 @@ class Analyzer {
         timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
         timingObj['Http request finished time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
         timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
-        timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete - timing.domLoading), 1000);
-        timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
-        timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive - timing.domLoading), 1000);
-        timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
+        timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete, timing.domLoading), 1000);
+        timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive, timing.domLoading), 1000);
+        timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domContentLoadedEventEnd, timing.domContentLoadedEventStart), 1000);
+        timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd, timing.loadEventStart), 1000);
 
         return timingObj;
     }

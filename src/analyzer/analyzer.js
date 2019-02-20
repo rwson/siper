@@ -71,10 +71,10 @@ export default class Analyzer {
         timingObj['Tcp connect time'] = lodash.divide(lodash.subtract(timing.connectEnd, timing.connectStart), 1000);
         timingObj['Http request finished time'] = lodash.divide(lodash.subtract(timing.responseEnd - timing.requestStart), 1000);
         timingObj['Download time of the page'] = lodash.divide(lodash.subtract(timing.responseEnd - timing.navigationStart), 1000);
-        timingObj['Dom loaded time'] = lodash.divide(lodash.subtract(timing.domComplete - timing.domLoading), 1000);
-        timingObj['Dom parsed time'] = lodash.divide(lodash.subtract(timing.domInteractive - timing.domLoading), 1000);
-        timingObj['Script Loaded time'] = lodash.divide(lodash.subtract(timing.domInteractive - timing.domLoading), 1000);
-        timingObj['onLoad event time'] = lodash.divide(lodash.subtract(timing.loadEventEnd - timing.loadEventStart), 1000);
+        timingObj['Dom loaded time'] = lodash.divide(lodash.subtract(timing.domComplete, timing.domLoading), 1000);
+        timingObj['Dom parsed time'] = lodash.divide(lodash.subtract(timing.domInteractive, timing.domLoading), 1000);
+        timingObj['Script Loaded time'] = lodash.divide(lodash.subtract(timing.domContentLoadedEventEnd, timing.domContentLoadedEventStart), 1000);
+        timingObj['onLoad event time'] = lodash.divide(lodash.subtract(timing.loadEventEnd, timing.loadEventStart), 1000);
 
         return timingObj;
     }

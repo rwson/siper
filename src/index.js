@@ -35,7 +35,7 @@ inquirer.prompt([
     {
         name: 'network',
         message: 'choose your network throttler',
-        choices: lodash.keys(netWorks),
+        choices: lodash.keys(netWorks).reverse(),
         type: 'list'
     },
     {
