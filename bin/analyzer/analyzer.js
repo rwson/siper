@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+        value: true
 });
 
 var _puppeteer = require('puppeteer');
@@ -9,8 +9,6 @@ var _puppeteer = require('puppeteer');
 var _puppeteer2 = _interopRequireDefault(_puppeteer);
 
 var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
 
 var _cliProgress = require('cli-progress');
 
@@ -30,84 +28,88 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 class Analyzer {
 
-    constructor(options) {
-        this.url = options.url;
-        this.times = options.times;
-        this.cache = options.cache;
-        this.times = options.times;
-        this.network = options.network;
-        this.logger = new _logger2.default({
-            log: options.log,
-            logPath: options.logPath
-        });
-        this.tableLogger = new _table2.default();
-        this.logs = [];
-        this.bar = null;
-    }
+        constructor(options) {
+                this.url = options.url;
+                this.times = options.times;
+                this.cache = options.cache;
+                this.times = options.times;
+                this.network = options.network;
+                this.logger = new _logger2.default({
+                        log: options.log,
+                        logPath: options.logPath
+                });
+                this.tableLogger = new _table2.default();
+                this.logs = [];
+                this.bar = null;
+        }
 
-    analyze() {
-        var _this = this;
+        analyze() {
+                var _this = this;
 
-        return _asyncToGenerator(function* () {
-            _this.bar = new _cliProgress2.default.Bar({}, _cliProgress2.default.Presets.shades_classic);
-            _this.bar.start();
-            const promiseQueues = [];
+                return _asyncToGenerator(function* () {
+                        _this.bar = new _cliProgress2.default.Bar({}, _cliProgress2.default.Presets.shades_classic);
+                        _this.bar.start();
 
-            for (let i = 0; i < _this.times; i++) {
-                promiseQueues.push((yield _this.getTimings(i)));
-            }
+                        const promiseQueues = [];
 
-            yield Promise.all(promiseQueues);
+                        for (let i = 0; i < _this.times; i++) {
+                                promiseQueues.push((yield _this.getTimings(i)));
+                        }
 
-            _this.bar.stop();
-            console.log('analyze finished, below is a table based on the number of times and statistical results.');
+                        yield Promise.all(promiseQueues);
 
-            yield _this.logger.generate(_this.logs);
+                        _this.bar.stop();
 
-            _this.tableLogger.printTable(_this.logs);
+                        console.log();
+                        console.log('analyze finished, below is a table based on the number of times and statistical results.');
 
-            process.exit(0);
-        })();
-    }
+                        yield _this.logger.generate(_this.logs);
 
-    getTimings(index) {
-        var _this2 = this;
+                        _this.tableLogger.printTable(_this.logs);
 
-        return _asyncToGenerator(function* () {
-            const browser = yield _puppeteer2.default.launch();
-            const page = yield browser.newPage();
-            const client = yield page.target().createCDPSession();
+                        process.exit(0);
+                })();
+        }
 
-            yield client.send('Network.emulateNetworkConditions', _this2.network);
-            yield page.setCacheEnabled(_this2.cache);
+        getTimings(index) {
+                var _this2 = this;
 
-            yield page.goto(_this2.url, {
-                timeout: 0
-            });
+                return _asyncToGenerator(function* () {
+                        const browser = yield _puppeteer2.default.launch();
+                        const page = yield browser.newPage();
+                        const client = yield page.target().createCDPSession();
 
-            const performanceTiming = JSON.parse((yield page.evaluate(function () {
-                return JSON.stringify(window.performance.timing);
-            })));
+                        yield client.send('Network.emulateNetworkConditions', _this2.network);
+                        yield page.setCacheEnabled(_this2.cache);
 
-            _this2.logs.push(_this2.calcTimes(performanceTiming));
+                        yield page.goto(_this2.url, {
+                                timeout: 0
+                        });
 
-            yield browser.close();
-            _this2.bar.update(_lodash2.default.multiply(_lodash2.default.divide(_lodash2.default.add(index, 1), _this2.times), 100));
-        })();
-    }
+                        const performanceTiming = JSON.parse((yield page.evaluate(function () {
+                                return JSON.stringify(window.performance.timing);
+                        })));
 
-    calcTimes(timing) {
-        const timingObj = {};
-        timingObj['DNS lookup time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domainLookupEnd, timing.domainLookupStart), 1000);
-        timingObj['Tcp connect time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.connectEnd, timing.connectStart), 1000);
-        timingObj['Http request finished time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.requestStart), 1000);
-        timingObj['Download time of the page'] = _lodash2.default.divide(_lodash2.default.subtract(timing.responseEnd - timing.navigationStart), 1000);
-        timingObj['Dom loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domComplete, timing.domLoading), 1000);
-        timingObj['Dom parsed time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domInteractive, timing.domLoading), 1000);
-        timingObj['Script Loaded time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.domContentLoadedEventEnd, timing.domContentLoadedEventStart), 1000);
-        timingObj['onLoad event time'] = _lodash2.default.divide(_lodash2.default.subtract(timing.loadEventEnd, timing.loadEventStart), 1000);
+                        _this2.logs.push(_this2.calcTimes(performanceTiming));
 
-        return timingObj;
-    }
+                        yield browser.close();
+                        _this2.bar.update((0, _lodash.multiply)((0, _lodash.divide)((0, _lodash.add)(index, 1), _this2.times), 100));
+                })();
+        }
+
+        calcTimes(timing) {
+                const timingObj = {};
+
+                timingObj['DNS lookup time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.domainLookupEnd, timing.domainLookupStart), 1000);
+                timingObj['Tcp connect time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.connectEnd, timing.connectStart), 1000);
+                timingObj['Http request finished time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.responseEnd - timing.requestStart), 1000);
+                timingObj['Download time of the page'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.responseEnd - timing.navigationStart), 1000);
+                timingObj['Dom loaded time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.domComplete, timing.domLoading), 1000);
+                timingObj['Dom parsed time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.domInteractive, timing.domLoading), 1000);
+                timingObj['Script Loaded time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.domContentLoadedEventEnd, timing.domContentLoadedEventStart), 1000);
+                timingObj['onLoad event time'] = (0, _lodash.divide)((0, _lodash.subtract)(timing.loadEventEnd, timing.loadEventStart), 1000);
+
+                return timingObj;
+        }
 }
 exports.default = Analyzer;

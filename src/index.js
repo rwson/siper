@@ -3,11 +3,9 @@
 /**
  * 参数处理, 调用性能分析方法
  */
-
-import { reolve } from 'path';
-
-import * as inquirer from 'inquirer';
 import lodash from 'lodash';
+
+import { prompt } from 'enquirer';
 
 import netWorks from './config/network';
 import defaultConfig from './config/default';
@@ -22,7 +20,23 @@ const urlPattern = new RegExp('^((ft|htt)ps?:\\/\\/)?'+
     '(\\?[;&a-z\\d%@_.,~+&:=-]*)?'+
     '(\\#[-a-z\\d_]*)?$','i');
 
-inquirer.prompt([
+const init = ({ url, network, times, cache, log }) => {
+    const config = {
+        ...defaultConfig,
+        url,
+        network: netWorks[network],
+        times: Number(times),
+        cache: cache === 'No',
+        log: log === 'Yes'
+    };
+
+    const analyzer = new Analyzer(config);
+    analyzer.analyze();
+};
+
+// init({});
+
+prompt([
     {
         name: 'url',
         message: 'input your test url',
@@ -34,15 +48,17 @@ inquirer.prompt([
     },
     {
         name: 'network',
+        type: 'select',
         message: 'choose your network throttler',
-        choices: lodash.keys(netWorks).reverse(),
-        type: 'list'
+        scroll: false,
+        choices: lodash.keys(netWorks).reverse()
     },
     {
         name: 'cache',
+        type: 'select',
         message: 'would you disable cache to analyze your website',
-        choices: ['Yes', 'No'],
-        type: 'list'
+        scroll: false,
+        choices: ['Yes', 'No']
     },
     {
         name: 'times',
@@ -52,21 +68,9 @@ inquirer.prompt([
     },
     {
         name: 'log',
+        type: 'select',
         message: 'would you want to export the log after analysis',
-        choices: ['Yes', 'No'],
-        type: 'list'
+        scroll: false,
+        choices: ['Yes', 'No']
     }
-]).then(async({ url, network, times, cache, log }) => {
-    const config = {
-        ...defaultConfig,
-        url,
-        network: netWorks[network],
-        times: Number(times),
-        cache: cache === 'No',
-        log: log === 'Yes'
-    };
-
-    const analyzer = new Analyzer(config);
-    await analyzer.analyze();
-});
-
+]).then(init);

@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { writeFileSync } from 'fs';
 
 export default class Logger {
 
@@ -11,9 +11,12 @@ export default class Logger {
         if (!this.enable) {
             return;
         }
-        fs.writeFileSync(this.logPath, JSON.stringify({
-            logs
-        }, null, 2));
+
+        try {
+            writeFileSync(this.logPath, JSON.stringify({
+                logs
+            }, null, 2));
+        } catch (e) {}
     }
 
 }

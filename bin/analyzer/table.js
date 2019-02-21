@@ -19,6 +19,9 @@ class TableLogger {
 
     printTable(logs) {
         return _asyncToGenerator(function* () {
+            if (logs.length === 0) {
+                return;
+            }
             const table = new _cliTable2.default({
                 head: ['time', 'DNS lookup time(s)', 'Tcp connect time(s)', 'Http request finished time(s)', 'Download time of the page(s)', 'Dom loaded time(s)', 'Dom parsed time(s)', 'Script Loaded time(s)', 'onLoad event time(s)']
             });

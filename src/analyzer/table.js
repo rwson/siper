@@ -6,6 +6,9 @@ import Table from 'cli-table';
 export default class TableLogger {
 
     async printTable(logs) {
+        if (logs.length === 0) {
+            return;
+        }
         const table = new Table({
             head: [
                 'time',
