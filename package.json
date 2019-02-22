@@ -1,6 +1,6 @@
 {
   "name": "siper",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "a website performance tester",
   "main": "index.js",
   "keywords": [
@@ -27,7 +27,9 @@
     "color-console": "0.0.1",
     "dayjs": "^1.8.6",
     "enquirer": "^2.3.0",
+    "ensure-directory": "^1.0.2",
     "lodash": "^4.17.11",
+    "pretty-bytes": "^5.1.0",
     "puppeteer": "^1.12.2"
   },
   "devDependencies": {

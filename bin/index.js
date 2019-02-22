@@ -3,16 +3,15 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-/**
- * 参数处理, 调用性能分析方法
- */
-
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 var _enquirer = require('enquirer');
+
+var _ensureDirectory = require('ensure-directory');
+
+var _ensureDirectory2 = _interopRequireDefault(_ensureDirectory);
 
 var _network = require('./config/network');
 
@@ -28,23 +27,38 @@ var _analyzer2 = _interopRequireDefault(_analyzer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * 参数处理, 调用性能分析方法
+ */
+
+
 const urlPattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + '((\\d{1,3}\\.){3}\\d{1,3}))' + '(\\:\\d+)?' + // port
 '(\\/[-a-z\\d%@_.~+&:]*)*' + '(\\?[;&a-z\\d%@_.,~+&:=-]*)?' + '(\\#[-a-z\\d_]*)?$', 'i');
 
-const init = ({ url, network, times, cache, log }) => {
-    const config = _extends({}, _default2.default, {
-        url,
-        network: _network2.default[network],
-        times: Number(times),
-        cache: cache === 'No',
-        log: log === 'Yes'
+const init = (() => {
+    var _ref = _asyncToGenerator(function* ({ url, network, times, cache, log, coverage, trace }) {
+        const config = _extends({}, _default2.default, {
+            url,
+            network: _network2.default[network],
+            times: Number(times),
+            cache: cache === 'No',
+            log: log === 'Yes',
+            coverage: coverage === 'Yes',
+            trace: trace === 'Yes'
+        });
+
+        yield (0, _ensureDirectory2.default)(config.logDir);
+
+        const analyzer = new _analyzer2.default(config);
+        analyzer.analyze();
     });
 
-    const analyzer = new _analyzer2.default(config);
-    analyzer.analyze();
-};
-
-// init({});
+    return function init(_x) {
+        return _ref.apply(this, arguments);
+    };
+})();
 
 (0, _enquirer.prompt)([{
     name: 'url',
@@ -75,6 +89,18 @@ const init = ({ url, network, times, cache, log }) => {
     name: 'log',
     type: 'select',
     message: 'would you want to export the log after analysis',
+    scroll: false,
+    choices: ['Yes', 'No']
+}, {
+    name: 'coverage',
+    type: 'select',
+    message: 'would you want to view the coverage of your css and js',
+    scroll: false,
+    choices: ['Yes', 'No']
+}, {
+    name: 'trace',
+    type: 'select',
+    message: 'would you want to trace timeline of your website',
     scroll: false,
     choices: ['Yes', 'No']
 }]).then(init);

@@ -50,5 +50,6 @@ siper
 - 支持禁用缓存模拟
 - 支持弱网模拟
 - 支持多次模拟
-- 多次模拟
 - 日志导出
+- 跟踪`Timeline`截取相应时间对应的页面截图, 并且导入[chrome调试面板](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/)查看 
+- 文件(内联)级别的`CSS`/`JavaScript`覆盖率

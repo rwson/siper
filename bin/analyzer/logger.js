@@ -15,7 +15,7 @@ class Logger {
         this.logPath = options.logPath;
     }
 
-    generate(logs) {
+    generate(logs, cssCoverages, jsCoverages) {
         var _this = this;
 
         return _asyncToGenerator(function* () {
@@ -25,8 +25,11 @@ class Logger {
 
             try {
                 (0, _fs.writeFileSync)(_this.logPath, JSON.stringify({
-                    logs
+                    logs,
+                    cssCoverages,
+                    jsCoverages
                 }, null, 2));
+                console.log(`your log was saved to ${_this.logPath}.`);
             } catch (e) {}
         })();
     }

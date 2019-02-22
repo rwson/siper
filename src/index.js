@@ -7,6 +7,8 @@ import lodash from 'lodash';
 
 import { prompt } from 'enquirer';
 
+import ensureDirectory from 'ensure-directory';
+
 import netWorks from './config/network';
 import defaultConfig from './config/default';
 
@@ -20,21 +22,23 @@ const urlPattern = new RegExp('^((ft|htt)ps?:\\/\\/)?'+
     '(\\?[;&a-z\\d%@_.,~+&:=-]*)?'+
     '(\\#[-a-z\\d_]*)?$','i');
 
-const init = ({ url, network, times, cache, log }) => {
+const init = async({ url, network, times, cache, log, coverage, trace }) => {
     const config = {
         ...defaultConfig,
         url,
         network: netWorks[network],
         times: Number(times),
         cache: cache === 'No',
-        log: log === 'Yes'
+        log: log === 'Yes',
+        coverage: coverage === 'Yes',
+        trace: trace === 'Yes'
     };
+
+    await ensureDirectory(config.logDir);
 
     const analyzer = new Analyzer(config);
     analyzer.analyze();
 };
-
-// init({});
 
 prompt([
     {
@@ -70,6 +74,20 @@ prompt([
         name: 'log',
         type: 'select',
         message: 'would you want to export the log after analysis',
+        scroll: false,
+        choices: ['Yes', 'No']
+    },
+    {
+        name: 'coverage',
+        type: 'select',
+        message: 'would you want to view the coverage of your css and js',
+        scroll: false,
+        choices: ['Yes', 'No']
+    },
+    {
+        name: 'trace',
+        type: 'select',
+        message: 'would you want to trace timeline of your website',
         scroll: false,
         choices: ['Yes', 'No']
     }
