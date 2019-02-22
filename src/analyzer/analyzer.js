@@ -67,6 +67,8 @@ export default class Analyzer {
             await this.calcCoverages();
         }
 
+        console.log('start generate log ...');
+
         if (this.trace) {
             await this.traceTimeline();
         }
