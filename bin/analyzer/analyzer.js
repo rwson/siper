@@ -93,8 +93,6 @@ class Analyzer {
                 yield _this.calcCoverages();
             }
 
-            console.log('start generate log ...');
-
             if (_this.trace) {
                 yield _this.traceTimeline();
             }
